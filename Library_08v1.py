@@ -12,7 +12,7 @@ class Book:
 
     def display_info(self):
         availability = "Доступна" if self.available else "Не доступна"
-        print(f"\nСписок:\
+        print(f"\nСписок данных:\
             \n1 - Название               - {self.title}\
             \n2 - Автор                  - {self.author}\
             \n3 - Год издания            - {self.year}\
