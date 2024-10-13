@@ -37,16 +37,20 @@ class Book:
             print(f"Книга '{self.title}' уже возвращена.")
 
     def __str__(self):
-        return f"Книга {self.title} от {self.author}, {self.year}, {self.pages} страниц"
+        return f"Книга '{self.title}' от {self.author}, {self.year} год, {self.pages} страниц"
 
     def __add__(self, other):
         if isinstance(other, int):
             self.pages += other
+        else:
+            print("Укажите количество страниц в виде целого числа.")
         return self
 
     def __sub__(self, other):
         if isinstance(other, int) and self.pages > other:
             self.pages -= other
+        else:
+            print("Укажите количество страниц в виде целого числа.")
         return self
 
     @staticmethod
@@ -63,32 +67,134 @@ class DigitalBook(Book):
         super().display_info()
         print(f"Формат: {self.file_format}")
 
+    def download_book(self):
+        return f"Книга '{self.title}' от {self.author}, {self.year} год, {self.pages} страниц, доступна для скачивания в формате: {self.file_format}"
+
     def __str__(self):
-        return f"Книга {self.title} от {self.author}, {self.year}, {self.pages} страниц, формат: {self.file_format}"
+            return (f'\nЭлектронная книга: {self.title}, '
+                    f'Автор: {self.author}, '
+                    f'Год: {self.year}, '
+                    f'Страниц: {self.pages}, '
+                    f'Формат: {self.file_format}').strip()
+library = []
 
+def add_book():
+    book_type = input("Введите тип книги (физическая или цифровая): ").strip().lower()
+    if book_type == "физическая" or book_type == 'цифровая':
+        title = input("Введите название книги: ")
+        author = input("Введите автора книги: ")
 
-# Пример использования функционала
-physical_book = Book("1984", "George Orwell", 1949, 328)
-digital_book = DigitalBook("Brave New World", "Aldous Huxley", 1932, 268, "PDF")
+        while True:
+            try:
+                year = int(input("Введите год издания книги: "))
+                if year <= 2024:
+                    break
+            except ValueError:
+                print("Пожалуйста, введите корректный год (числом).")
 
-# Показать информацию о книге
-physical_book.display_info()
-print()
-digital_book.display_info()
+        while True:
+            try:
+                pages = int(input("Введите количество страниц: "))
+                if pages > 0:
+                    break
+            except ValueError:
+                print("Пожалуйста, введите корректное количество страниц (число).")
 
-# Взять и вернуть физическую книгу
-physical_book.borrow_book()
-physical_book.return_book()
+    if book_type == "физическая":
+            library.append(Book(title, author, year, pages))
+            print(f"\nФизическая книга '{title}' добавлена в библиотеку.")
 
-# Показать строковое представление книги
-print(str(physical_book))
-print(str(digital_book))
+    elif book_type == "цифровая":
+            file_format = input("Введите формат файла (PDF, EPUB и т.д.): ")
+            library.append(DigitalBook(title, author, year, pages, file_format))
+            print(f"\nЦифровая книга '{title}' добавлена в библиотеку.")
+    else:
+        print("Неверный тип книги!")
 
-# Изменение количества страниц
-physical_book += 20
-digital_book -= 50
-print(f"Updated pages in '{physical_book.title}': {physical_book.pages}")
-print(f"Updated pages in '{digital_book.title}': {digital_book.pages}")
+def take_book():
+    title = input("Введите название книги, которую хотите взять: ")
+    for book in library:
+        if isinstance(book, Book) and not isinstance(book, DigitalBook) and book.title == title:
+            book.borrow_book()
+            return
+    print(f"Книга '{title}' не найдена или недоступна для взятия.")
 
-# Показать общее количество книг в библиотеке
-Book.total_books()
+def return_book():
+    title = input("Введите название книги, которую хотите вернуть: ")
+    for book in library:
+        if isinstance(book, Book) and not isinstance(book, DigitalBook) and book.title == title:
+            book.return_book()
+            return
+    print(f"Книга '{title}' не найдена среди взятых.")
+
+def download_book():
+    title = input("Введите название книги, которую хотите скачать: ")
+    for book in library:
+        if isinstance(book, DigitalBook) and book.title == title:
+            book.download_book()
+            print(f"Цифровая книга '{title}' скачана.")
+            return
+    print(f"\nЦифровая книга '{title}' не найдена.")
+
+def show_book_info():
+    title = input("Введите название книги: ")
+    for book in library:
+        if book.title == title:
+            book.display_info()
+            return
+    print(f"\nКнига '{title}' не найдена.")
+
+def show_all_books():
+    if library:
+        for book in library:
+            print(book)
+    else:
+        print("\nВ библиотеке нет книг.")
+
+def show_book_str():
+    title = input("Введите название книги: ")
+    for book in library:
+        if book.title == title:
+            print(str(book))
+            return
+    print(f"\nКнига '{title}' не найдена.")
+
+def main():
+    while True:
+        print("\nМеню:\
+        \n1 - Добавить книгу\
+        \n2 - Взять физическую книгу\
+        \n3 - Вернуть физическую книгу\
+        \n4 - Скачать цифровую книгу\
+        \n5 - Показать информацию о книге\
+        \n6 - Показать список всех книг\
+        \n7 - Показать общее количество книг\
+        \n8 - Показать строковое представление книги\
+        \n0 - Выйти")
+
+        command = input("\nВыберите опцию: ").strip()
+
+        if command == "1":
+            add_book()
+        elif command == "2":
+            take_book()
+        elif command == "3":
+            return_book()
+        elif command == "4":
+            download_book()
+        elif command == "5":
+            show_book_info()
+        elif command == "6":
+            show_all_books()
+        elif command == "7":
+            Book.total_books()
+        elif command == "8":
+            show_book_str()
+        elif command == "0":
+            print("Выход...")
+            break
+        else:
+            print("Неверная команда, попробуйте снова.")
+
+if __name__ == "__main__":
+    main()
