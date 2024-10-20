@@ -25,7 +25,9 @@ class Student:
         Отображает информацию о студенте: имя, возраст и среднюю оценку.
         """
         averge_grade = self.give_averge_grade()
-        print(f"Студент: {self.name}, Возраст: {self.age}, Средняя оценка: {averge_grade:.2f}")
+        print(
+            f"Студент: {self.name}, Возраст: {self.age}, Средняя оценка: {averge_grade:.2f}"
+        )
 
     def give_averge_grade(self):
         """
@@ -52,8 +54,13 @@ class GraduateStudent(Student):
         Отображает информацию о выпускнике, включая тему дипломной работы.
         """
         averge_grade = self.give_averge_grade()
-        print(f"Выпускник: {self.name}, Возраст: {self.age}, "
-              f"Средняя оценка: {averge_grade:.2f}, Тема дипломной работы: {self.topic_diploma}")
+        print(
+            f"Выпускник: {self.name}, Возраст: {self.age}, "
+            f"Средняя оценка: {averge_grade:.2f}, Тема дипломной работы: {self.topic_diploma}"
+        )
+
+
+students = []  # Список для хранения объектов студентов и выпускников
 
 
 # Основная функция, управляющая взаимодействием с пользователем
@@ -62,31 +69,33 @@ def main():
     Основная функция, запускающая интерфейс взаимодействия с пользователем.
     Реализует меню для управления данными о студентах и выпускниках.
     """
-    students = []  # Список для хранения объектов студентов и выпускников
-
     while True:
         """
         Цикл для отображения меню и выполнения выбранных пользователем действий.
         """
-        print("\nМеню:\
+        print(
+            "\nМеню:\
             \n1 - Добавить студента\
             \n2 - Добавить оценку студенту\
             \n3 - Добавить тему дипломной работы (для выпускников)\
             \n4 - Показать информацию о студентах\
             \n5 - Сортировка по средней оценке\
-            \n6 - Выход")
+            \n6 - Выход"
+        )
 
         choice = input("Выберите опцию: ")  # Запрос у пользователя выбора действия
 
-        if choice == '1':
+        if choice == "1":
             """
             Добавление нового студента или выпускника в зависимости от типа.
             """
-            type_of_student = input("Введите тип студента (обычный/выпускник): ").strip().lower()
-            if type_of_student == 'выпускник' or type_of_student == 'обычный':
+            type_of_student = (
+                input("Введите тип студента (обычный/выпускник): ").strip().lower()
+            )
+            if type_of_student == "выпускник" or type_of_student == "обычный":
                 name = input("Введите имя студента: ").strip()
                 age = int(input("Введите возраст студента: "))
-                if type_of_student == 'выпускник':
+                if type_of_student == "выпускник":
                     topic_diploma = input("Введите тему дипломной работы: ")
                     students.append(GraduateStudent(name, age, topic_diploma))
                 else:
@@ -94,7 +103,7 @@ def main():
             else:
                 print("Неправильно введен тип студента.")
 
-        elif choice == '2':
+        elif choice == "2":
             """
             Добавление оценки существующему студенту.
             """
@@ -105,7 +114,6 @@ def main():
                 print("Ошибка: оценка должна быть числом")
                 continue
 
-
             for student in students:
                 if student.name == name:
                     student.give_grade(grade)
@@ -114,7 +122,7 @@ def main():
             else:
                 print("Студент не найден.")
 
-        elif choice == '3':
+        elif choice == "3":
             """
             Добавление или обновление темы дипломной работы для выпускника.
             """
@@ -128,23 +136,25 @@ def main():
             else:
                 print("Выпускник не найден.")
 
-        elif choice == '4':
+        elif choice == "4":
             """
             Отображение информации обо всех студентах и выпускниках.
             """
             for student in students:
                 student.display_info()
 
-        elif choice == '5':
+        elif choice == "5":
             """
             Сортировка студентов по средней оценке в порядке убывания.
             """
-            sorted_students = sorted(students, key=lambda s: s.give_averge_grade(), reverse=True)
+            sorted_students = sorted(
+                students, key = lambda s: s.give_averge_grade(), reverse = True
+            )
             print("Студенты по средней оценке:")
             for student in sorted_students:
                 student.display_info()
 
-        elif choice == '6':
+        elif choice == "6":
             """
             Завершение работы программы.
             """

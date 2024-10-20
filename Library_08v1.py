@@ -15,7 +15,7 @@ class Book:
 
     def display_info(self):
         """
-        Отображает информацию о книге, включая ее доступность.
+        Отображает информацию о книге,включая ее доступность.
         """
         availability = "Доступна" if self.available else "Не доступна"
         print(f"\nСписок данных:\
@@ -80,6 +80,9 @@ class Book:
         """
         print(f"Всего книг в библиотеке: {Book.total_available_books}")
 
+    @staticmethod
+    def null_books():
+        Book.total_available_books = 0
 
 class DigitalBook(Book):
     def __init__(self, title, author, year, pages, file_format):
